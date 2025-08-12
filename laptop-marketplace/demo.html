@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaptopHub - Your Premier Laptop Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .splash-screen { transition: opacity 0.5s ease-out; }
+        .hidden { display: none; }
+        .fade-out { opacity: 0; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Splash Screen -->
+    <div id="splash" class="splash-screen fixed inset-0 bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center z-50">
+        <div class="text-center text-white">
+            <div class="mb-8">
+                <div class="bg-white rounded-full p-6 w-24 h-24 mx-auto flex items-center justify-center mb-4 animate-pulse">
+                    <span class="text-3xl">💻</span>
+                </div>
+                <h1 class="text-4xl font-bold mb-2 animate-fade-in">LaptopHub</h1>
+                <p class="text-xl text-primary-100">Your Premier Laptop Marketplace</p>
+            </div>
+            <div class="w-64 mx-auto">
+                <div class="bg-white/20 rounded-full h-2 mb-4">
+                    <div id="progress" class="bg-white rounded-full h-2 transition-all duration-100" style="width: 0%"></div>
+                </div>
+                <p id="progress-text" class="text-primary-100 text-sm">Loading 0%</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="hidden">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-lg sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <div class="bg-primary-600 p-2 rounded-lg">
+                            <span class="text-white text-xl">💻</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900">LaptopHub</span>
+                    </div>
+                    
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#" class="text-primary-600 bg-primary-50 px-3 py-2 rounded-md font-medium">Home</a>
+                        <a href="#" class="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md font-medium">Browse</a>
+                        <a href="#" class="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md font-medium">Categories</a>
+                        <a href="#" class="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md font-medium">Deals</a>
+                    </div>
+
+                    <div class="flex-1 max-w-lg mx-8 hidden lg:block">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-400">🔍</span>
+                            </div>
+                            <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Search laptops...">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 text-gray-400 hover:text-gray-600 relative">
+                            <span class="text-xl">🔔</span>
+                            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400"></span>
+                        </button>
+                        
+                        <button class="p-2 text-gray-400 hover:text-gray-600 relative">
+                            <span class="text-xl">❤️</span>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </button>
+
+                        <button class="p-2 text-gray-400 hover:text-gray-600 relative">
+                            <span class="text-xl">🛒</span>
+                            <span class="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">2</span>
+                        </button>
+
+                        <button onclick="showLogin()" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 font-medium">
+                            Sign In
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-br from-primary-600 via-primary-700 to-blue-800 text-white">
+            <div class="max-w-7xl mx-auto px-4 py-24">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h1 class="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                            Find Your Perfect
+                            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+                                Laptop
+                            </span>
+                        </h1>
+                        <p class="text-xl mb-8 text-gray-200 leading-relaxed">
+                            Discover premium laptops from trusted sellers. Whether you're gaming, 
+                            working, or studying, we have the perfect device for you.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button class="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                                Browse Laptops →
+                            </button>
+                            <button onclick="showLogin()" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition-colors">
+                                Start Selling
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=400&fit=crop" 
+                             alt="Modern laptop" class="rounded-2xl shadow-2xl">
+                        <div class="absolute -bottom-6 -right-6 bg-yellow-400 text-gray-900 p-4 rounded-xl shadow-lg">
+                            <div class="text-2xl font-bold">2,500+</div>
+                            <div class="text-sm">Happy Customers</div>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-white/10 backdrop-blur-md text-white p-3 rounded-lg">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-yellow-400">⭐</span>
+                                <span class="font-semibold">4.9/5</span>
+                            </div>
+                            <div class="text-sm opacity-90">Average Rating</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Products -->
+        <section class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Featured Laptops</h2>
+                    <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                        Hand-picked premium laptops with the best value for money
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer">
+                        <div class="relative mb-4">
+                            <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop" 
+                                 alt="MacBook Pro" class="w-full h-48 object-cover rounded-lg">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-green-100 text-green-800 px-2 py-1 text-xs font-semibold rounded-full">New</span>
+                            </div>
+                            <button class="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50">
+                                <span class="text-gray-600">❤️</span>
+                            </button>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">MacBook Pro 16" M3 Max</h3>
+                        <p class="text-sm text-gray-500 mb-2">Apple</p>
+                        <div class="flex items-center space-x-1 mb-2">
+                            <span class="text-yellow-400">⭐</span>
+                            <span class="text-sm font-medium">4.9</span>
+                            <span class="text-sm text-gray-500">(245)</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-2xl font-bold text-gray-900">$3,499</div>
+                                <div class="text-sm text-gray-500 line-through">$3,999</div>
+                            </div>
+                            <div class="text-sm font-medium text-green-600">Save $500</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer">
+                        <div class="relative mb-4">
+                            <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop" 
+                                 alt="Dell XPS" class="w-full h-48 object-cover rounded-lg">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 text-xs font-semibold rounded-full">Like New</span>
+                            </div>
+                            <button class="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50">
+                                <span class="text-gray-600">❤️</span>
+                            </button>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Dell XPS 13 Plus</h3>
+                        <p class="text-sm text-gray-500 mb-2">Dell</p>
+                        <div class="flex items-center space-x-1 mb-2">
+                            <span class="text-yellow-400">⭐</span>
+                            <span class="text-sm font-medium">4.7</span>
+                            <span class="text-sm text-gray-500">(189)</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-2xl font-bold text-gray-900">$1,299</div>
+                                <div class="text-sm text-gray-500 line-through">$1,599</div>
+                            </div>
+                            <div class="text-sm font-medium text-green-600">Save $300</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer">
+                        <div class="relative mb-4">
+                            <img src="https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&h=300&fit=crop" 
+                                 alt="ThinkPad" class="w-full h-48 object-cover rounded-lg">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-yellow-100 text-yellow-800 px-2 py-1 text-xs font-semibold rounded-full">Good</span>
+                            </div>
+                            <button class="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50">
+                                <span class="text-gray-600">❤️</span>
+                            </button>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">ThinkPad X1 Carbon</h3>
+                        <p class="text-sm text-gray-500 mb-2">Lenovo</p>
+                        <div class="flex items-center space-x-1 mb-2">
+                            <span class="text-yellow-400">⭐</span>
+                            <span class="text-sm font-medium">4.8</span>
+                            <span class="text-sm text-gray-500">(156)</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-2xl font-bold text-gray-900">$1,899</div>
+                                <div class="text-sm text-gray-500 line-through">$2,299</div>
+                            </div>
+                            <div class="text-sm font-medium text-green-600">Save $400</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer">
+                        <div class="relative mb-4">
+                            <img src="https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=300&fit=crop" 
+                                 alt="Surface Laptop" class="w-full h-48 object-cover rounded-lg">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-green-100 text-green-800 px-2 py-1 text-xs font-semibold rounded-full">New</span>
+                            </div>
+                            <button class="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50">
+                                <span class="text-gray-600">❤️</span>
+                            </button>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Surface Laptop Studio</h3>
+                        <p class="text-sm text-gray-500 mb-2">Microsoft</p>
+                        <div class="flex items-center space-x-1 mb-2">
+                            <span class="text-yellow-400">⭐</span>
+                            <span class="text-sm font-medium">4.6</span>
+                            <span class="text-sm text-gray-500">(98)</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-2xl font-bold text-gray-900">$2,199</div>
+                                <div class="text-sm text-gray-500 line-through">$2,599</div>
+                            </div>
+                            <div class="text-sm font-medium text-green-600">Save $400</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <button class="bg-primary-600 text-white px-8 py-3 rounded-lg hover:bg-primary-700 font-semibold">
+                        View All Laptops →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="py-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Shop by Category</h2>
+                    <p class="text-xl text-gray-600">Find laptops tailored to your specific needs</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 text-center cursor-pointer">
+                        <div class="bg-primary-600 text-white p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                            <span class="text-2xl">⚡</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Gaming Laptops</h3>
+                        <p class="text-gray-600">234 laptops available</p>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 text-center cursor-pointer">
+                        <div class="bg-primary-600 text-white p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                            <span class="text-2xl">🏆</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Business Laptops</h3>
+                        <p class="text-gray-600">189 laptops available</p>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 text-center cursor-pointer">
+                        <div class="bg-primary-600 text-white p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                            <span class="text-2xl">💻</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Ultrabooks</h3>
+                        <p class="text-gray-600">156 laptops available</p>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 text-center cursor-pointer">
+                        <div class="bg-primary-600 text-white p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                            <span class="text-2xl">❤️</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Budget Laptops</h3>
+                        <p class="text-gray-600">298 laptops available</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Choose LaptopHub?</h2>
+                    <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                        We provide the best laptop shopping experience with unmatched service
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                    <div>
+                        <div class="bg-primary-50 text-primary-600 p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                            <span class="text-2xl">🔒</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Secure Transactions</h3>
+                        <p class="text-gray-600">All payments are encrypted and secure with buyer protection</p>
+                    </div>
+
+                    <div>
+                        <div class="bg-primary-50 text-primary-600 p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                            <span class="text-2xl">🚚</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Fast Shipping</h3>
+                        <p class="text-gray-600">Free shipping on orders over $500 with 2-day delivery</p>
+                    </div>
+
+                    <div>
+                        <div class="bg-primary-50 text-primary-600 p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                            <span class="text-2xl">⭐</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Quality Guaranteed</h3>
+                        <p class="text-gray-600">Every laptop is verified and comes with warranty coverage</p>
+                    </div>
+
+                    <div>
+                        <div class="bg-primary-50 text-primary-600 p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                            <span class="text-2xl">🔍</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3">Easy Discovery</h3>
+                        <p class="text-gray-600">Find exactly what you need with advanced search and filters</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="bg-primary-600 text-white py-16">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="text-4xl font-bold mb-4">Ready to Get Started?</h2>
+                <p class="text-xl mb-8 text-primary-100">
+                    Join thousands of satisfied customers and find your perfect laptop today
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100">
+                        Start Shopping
+                    </button>
+                    <button onclick="showLogin()" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary-600">
+                        Become a Seller
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold">Welcome Back</h2>
+                <button onclick="hideLogin()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            
+            <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+                <h4 class="font-semibold text-blue-800 mb-2">Demo Credentials:</h4>
+                <div class="text-sm text-blue-700 space-y-1">
+                    <div><strong>Admin:</strong> admin@laptophub.com / admin123</div>
+                    <div><strong>Seller:</strong> seller@example.com / seller123</div>
+                    <div><strong>Buyer:</strong> buyer@example.com / buyer123</div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <input type="email" placeholder="Email address" 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                <input type="password" placeholder="Password" 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="mr-2">
+                        <span class="text-sm text-gray-600">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-primary-600 hover:text-primary-800">Forgot password?</a>
+                </div>
+
+                <button onclick="simulateLogin()" class="w-full bg-primary-600 text-white py-3 rounded-lg hover:bg-primary-700 font-semibold">
+                    Sign In
+                </button>
+
+                <div class="text-center">
+                    <span class="text-gray-600">Don't have an account? </span>
+                    <a href="#" class="text-primary-600 hover:text-primary-800 font-medium">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Splash screen animation
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 2;
+            document.getElementById('progress').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = `Loading ${progress}%`;
+            
+            if (progress >= 100) {
+                clearInterval(progressInterval);
+                setTimeout(() => {
+                    document.getElementById('splash').classList.add('fade-out');
+                    setTimeout(() => {
+                        document.getElementById('splash').classList.add('hidden');
+                        document.getElementById('main-app').classList.remove('hidden');
+                    }, 500);
+                }, 500);
+            }
+        }, 50);
+
+        // Login modal functions
+        function showLogin() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        function hideLogin() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        function simulateLogin() {
+            alert('🎉 Login successful! Welcome to LaptopHub!\n\nNote: This is a demo application showcasing the UI/UX design and features.');
+            hideLogin();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('loginModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideLogin();
+            }
+        });
+    </script>
+</body>
+</html>
