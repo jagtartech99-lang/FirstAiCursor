@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { AnimatePresence } from 'framer-motion';
 
 // Context Providers
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Components
 import SplashScreen from './components/SplashScreen';
@@ -143,8 +143,6 @@ const AuthLayout: React.FC<LayoutProps> = ({ children }) => (
 );
 
 // Route Protection Components
-import { useAuth } from './contexts/AuthContext';
-
 const ProtectedRoute: React.FC<LayoutProps> = ({ children }) => {
   const { user, isLoading } = useAuth();
 

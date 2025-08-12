@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Eye, EyeOff, Mail, Lock, Chrome, Facebook } from 'lucide-react';
@@ -12,13 +12,13 @@ import toast from 'react-hot-toast';
 const schema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
   password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
-  rememberMe: yup.boolean(),
+  rememberMe: yup.boolean().optional(),
 });
 
 interface LoginFormData {
   email: string;
   password: string;
-  rememberMe: boolean;
+  rememberMe?: boolean;
 }
 
 interface LoginFormProps {
@@ -43,7 +43,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     },
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       setIsLoading(true);
       await login(data.email, data.password, data.rememberMe);

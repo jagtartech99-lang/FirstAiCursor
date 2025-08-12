@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Eye, EyeOff, Mail, Lock, User, UserCheck, Store } from 'lucide-react';
@@ -16,7 +16,7 @@ const schema = yup.object().shape({
     .string()
     .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Please confirm your password'),
-  role: yup.string().oneOf(['buyer', 'seller']).required('Please select a role'),
+  role: yup.string().oneOf(['buyer', 'seller']).required('Please select a role') as yup.Schema<'buyer' | 'seller'>,
   termsAccepted: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
 });
 
@@ -56,7 +56,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
 
   const selectedRole = watch('role');
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     try {
       setIsLoading(true);
       await registerUser({
